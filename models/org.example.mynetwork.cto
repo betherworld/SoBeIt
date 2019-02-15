@@ -1,0 +1,95 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.example.mynetwork
+
+// general stakeholder in the supply chain
+participant Stakeholder identified by stakeholderId {
+  o String stakeholderId
+  o String name
+  o String location
+}
+
+participant Farmer extends Stakeholder {
+  o Boolean certified
+}
+
+participant Trader extends Stakeholder {
+}
+
+participant Subcontracter extends Stakeholder {
+}
+
+// general Sensor (IoT Device)
+participant Sensor identified by sensorId {
+  o String sensorId
+  o String location
+  o String description
+  --> StorageType storage
+}
+
+// The beans can be located in differend storage types. Those can be the field, a truck or a container.
+asset StorageType identified by storageId {
+  o String description
+  o String storageId
+  o String location
+  o Double weight
+  --> Stakeholder owner
+}
+
+asset Field extends StorageType {
+}
+
+asset Truck extends StorageType {
+  o Double capacity
+  --> Field origin
+}
+
+asset WHContainer extends StorageType {
+  o Double capacity
+  --> Field origin
+}
+
+// The data that comes from the IoT sensors is stored as assets
+asset SensorData identified by dataId {
+  o String dataId
+  --> Sensor sensor
+}
+
+asset TempHumidData extends SensorData {
+  o Double[] temperature
+  o Double[] humidity
+}
+
+asset WeightData extends SensorData {
+  o Double[] weight
+}
+
+// Batches of soy beans represent a complete harvest from a specific field
+asset Batch identified by batchId {
+  o String batchId
+  o Double fieldWeight
+  o Double warehouseWeight
+  o Double traderWeight
+  --> Field origin
+}
+
+transaction SupplyTrader {
+  --> Truck truck
+  --> WHContainer container
+}
