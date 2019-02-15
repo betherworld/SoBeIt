@@ -1,5 +1,5 @@
-#SoBeIt
+# SoBeIt
 
-Proof of Concept for a secured soy bean supply chain using IoT sensors and hyperledger composer.
+## Proof of Concept for a secured soy bean supply chain using IoT sensors and hyperledger composer.
 
 We connected a temperature/humidity sensor as well as a pressure sensor to a propagator and recorded the data using the pushing_data.ino script. We then used hyperledger composer to model part of a soy bean supply chain. Via the REST server that comes with hyperledger composer, the sensor data is pushed from the propagator via wifi to hyperledger and stored as assets. We implemented the transaction that could take place when a truck coming from the farmers warehouse loads beans into a container at the traders warehouse. The container is weighed (modeled by the pressure sensor) and we check if the total weight of soy beans from a specific field bought from the farmer exceeds the total amount of soy beans that were harvested on that field in the first place. This would be measured using weight scales inside the combine machines directly on the field. So, if the farmer tries to sell more beans than he harvested, the transaction to the Trader will be rejected.
